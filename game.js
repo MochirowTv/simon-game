@@ -1,15 +1,17 @@
-var gamePattern = [];
+// Variables necesarias para el juego
+var gamePattern = []; // lista vacia que guardara la secuencia de colores
 
-var buttonColors = ["red", "blue", "green", "yellow"];
+var buttonColors = ["red", "blue", "green", "yellow"]; // una lista con los colores que representaran a los botones con su ID
 
-var userClickedPattern = [];
+var userClickedPattern = []; // lista que guardara los colores que el usuario clikeara al presionar los botones
 
-var level = 0;
+var level = 0; // variable que ira incrementando a medida que se cumpla el patron del juego
 
-var started = false;
+var started = false; // variable que servira para evitar reiniciar el juego
 
+// Funcion que crea la secuencia de clicks empezando desde uno hasta infinito
 function nextSequence(){
-    userClickedPattern = [];
+    userClickedPattern = []; 
     level++;
     $("#level-title").text("Level " + level);
     var randomNumber = Math.floor(Math.random() * 4);
@@ -23,6 +25,7 @@ function nextSequence(){
 
 }
 
+// Funcion para reproducir los sonidos de cada boton con su respectivo color
 function playSound(name){
     switch (name) {
         case "red":
@@ -50,6 +53,7 @@ function playSound(name){
     }
 }
 
+// Funcion para reiniciar el juego una vez que pierdes.
 function startOver(){
         level = 0;
         gamePattern = [];
@@ -57,17 +61,18 @@ function startOver(){
         started = false;
 }
 
+// Verificamos si el patron corresponde a los clicks que el usuario hace
 function checkAnswer(currentLevel){
     if (userClickedPattern[currentLevel] === gamePattern[currentLevel]) {
         if (userClickedPattern.length === gamePattern.length) {
-                console.log("Success");
+                // console.log("Success");
                 userClickedPattern = [];
                 setTimeout(function(){
                     nextSequence();
                 }, 1000);
         }
     } else {
-        console.log("Error");
+        // console.log("Error");
         var wrong =  new Audio('./sounds/wrong.mp3');
         wrong.play();
         $("body").addClass("game-over");
@@ -101,5 +106,12 @@ $(document).keypress(function(event){
         nextSequence();
         started = true;
         // $("#level-title").text("Level 0")
+    }
+});
+
+$("body").on("click", function(){
+    if (!started ) {
+        nextSequence();
+        started = true;
     }
 });
